@@ -80,7 +80,28 @@ public class MyTree {
 		System.out.println(tree.root.left.left.right.val);// 6
 		System.out.println(tree.root.left.right.left.val);// 11
 		System.out.println(tree.root.left.right.right.val);// 13
-		System.out.println(tree.root.left.left.left.val);// 4
+		System.out.println(tree.root.left.left.left.val);// 4  
+		
+		
+		tree.add(25);
+		tree.add(20);
+		tree.add(30);
+		tree.add(27);
+		tree.add(28);
+		System.out.println(tree.root.right.val);
+		System.out.println(tree.root.right.right.val);
+		System.out.println(tree.root.right.left.val);  
+		System.out.println(tree.root.right.right.left.val);
+		System.out.println(tree.root.right.right.left.right.val);
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 	}// main
 
