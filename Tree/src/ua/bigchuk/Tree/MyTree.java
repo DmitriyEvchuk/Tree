@@ -1,14 +1,17 @@
 package ua.bigchuk.Tree;
 
+import ua.bigchuk.wordcounter.FileReaderImplement;
+import ua.bigchuk.wordcounter.ImplementWordsExtraction;
+
 public class MyTree {
 
 	Integer sizeLeftTree;
 	Integer sizeRightTree;
-	Data root;
+	MyTreeItem root;
 
-	public void add(Integer val) {
+	public void add(String word, int count) {
 
-		Data data = new Data();
+		MyTreeItem data = new MyTreeItem();
 
 		if (root == null)
 
@@ -17,91 +20,116 @@ public class MyTree {
 		}// if
 
 		else {
-			Data node = root;
-			// I change this but now I don't now what
-			while (((node.val > val) && (node.left != null))
-					|| ((node.val < val) && (node.right != null))) {
 
-				if (node.val > val) {// if1
-					node = node.left;
+			MyTreeItem node = find(word);
 
-				}// if1
-
-				else {// if2
-					node = node.right;
-
-				}// if2
-
-				
-
-			}// while
-
-			if (node.val > val) {// if1
+			if (compare(node.word, word) == 1) {// if1
 				node.left = data;
 
 			}// if1
 
-			if (node.val < val) {// if2
+			if (compare(node.word, word) == -1) {// if2
 				node.right = data;
 
 			}// if2
 
+			if (compare(node.word, word) == 0) {// if3
+				data = node;
+
+			}// if3
+
 		}// else
 
-		data.val = val;
+		data.word = word;
+		data.count = count;
 
 	}
 
-	private class Data {
+	public Integer get(String key) {
 
-		Data left;
-		Data right;
-		Integer val;
+		MyTreeItem current = null;
+		if (root != null) {
+			current = find(key);
+
+			if (current.word.equals(key))
+				return current.count;
+		}
+
+		return null;
+
+	}
+
+	private MyTreeItem find(String key) {
+
+		MyTreeItem node = root;
+		// I change this but now I don't now what
+		while (((compare(node.word, key) == 1) && (node.left != null))
+				|| ((compare(node.word, key) == -1) && (node.right != null))) {
+
+			if (compare(node.word, key) == 1) {// if1
+				node = node.left;
+
+			}// if1
+
+			else {// if2
+				node = node.right;
+
+			}// if2
+
+		}// while
+
+		return node;
+
+	}
+
+	private int compare(String nodeVal, String val) {
+
+		if (nodeVal.hashCode() > val.hashCode())
+			return 1;
+
+		if (nodeVal.hashCode() < val.hashCode())
+			return -1;
+
+		// else
+		return 0;
+	}
+
+	private class MyTreeItem {
+
+		MyTreeItem left;
+		MyTreeItem right;
+
+		String word;
+		Integer count;
 
 	}
 
 	public static void main(String[] args) {
 
-		MyTree tree = new MyTree();
+		FileReaderImplement file = new FileReaderImplement();
+		file.readFile();
 
-		tree.add(15);
-		tree.add(10);
-		tree.add(12);
-		tree.add(5);
-		tree.add(6);
-		tree.add(11);
-		tree.add(13);
-		tree.add(4);
+		String s = file.getFileString();
 
-		System.out.println(tree.root.val);// 15
-		System.out.println(tree.root.left.val);// 10
-		System.out.println(tree.root.left.right.val);// 12
-		System.out.println(tree.root.left.left.val);// 5
-		System.out.println(tree.root.left.left.right.val);// 6
-		System.out.println(tree.root.left.right.left.val);// 11
-		System.out.println(tree.root.left.right.right.val);// 13
-		System.out.println(tree.root.left.left.left.val);// 4  
-		
-		
-		tree.add(25);
-		tree.add(20);
-		tree.add(30);
-		tree.add(27);
-		tree.add(28);
-		System.out.println(tree.root.right.val);
-		System.out.println(tree.root.right.right.val);
-		System.out.println(tree.root.right.left.val);  
-		System.out.println(tree.root.right.right.left.val);
-		System.out.println(tree.root.right.right.left.right.val);
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		ImplementWordsExtraction word = new ImplementWordsExtraction();
+		word.parseString(s);
+		String f[] = word.getWords();
+
+		MyTree words = new MyTree();
+
+		long totalT = -System.currentTimeMillis();
+		for (int i = 0; i < f.length; i++) {
+
+			Integer count = words.get(f[i]);
+			words.add(f[i], count == null ? 1 : count + 1);
+		}
+		// time 30-34ms in base version WordsCounterImplement 1454ms
+		totalT += System.currentTimeMillis();
+
+		System.out.println(words.get("Acknowledgement"));
+		System.out.println(totalT);
+
+		// E:\work\rfc2822.txt
 
 	}// main
 
