@@ -1,13 +1,47 @@
 package ua.bigchuk.Tree;
 
+import java.util.*;
+
 import ua.bigchuk.wordcounter.FileReaderImplement;
 import ua.bigchuk.wordcounter.ImplementWordsExtraction;
+import ua.bigchuk.wordcounter.WordSaveImplement;
 
 public class MyTree {
 
-	Integer sizeLeftTree;
-	Integer sizeRightTree;
-	MyTreeItem root;
+	public MyTree() {
+	}
+
+	public MyTree(CaseSensitive caller, TreeItemProcess callerProcess) {
+
+		this.callerProcess = callerProcess;
+		this.caller = caller;
+	}
+
+	public MyTree(CaseSensitive caller) {
+		this.caller = caller;
+	}
+
+	public MyTree(TreeItemProcess callerProcess) {
+
+		this.callerProcess = callerProcess;
+		caller = new WithCaseSensitive();
+	}
+
+	private TreeItemProcess callerProcess;
+	private CaseSensitive caller;
+
+	private Integer sizeLeftTree;
+	private Integer sizeRightTree;
+	private MyTreeItem root;
+
+	// when I will do balanse I need size and I change this method
+	public boolean isEmpty1() {
+
+		if (root != null)
+			return false;
+
+		return true;
+	}
 
 	public void add(String word, int count) {
 
@@ -23,17 +57,17 @@ public class MyTree {
 
 			MyTreeItem node = find(word);
 
-			if (compare(node.word, word) == 1) {// if1
+			if (caller.compare(node.word, word) == 1) {// if1
 				node.left = data;
 
 			}// if1
 
-			if (compare(node.word, word) == -1) {// if2
+			if (caller.compare(node.word, word) == -1) {// if2
 				node.right = data;
 
 			}// if2
 
-			if (compare(node.word, word) == 0) {// if3
+			if (caller.compare(node.word, word) == 0) {// if3
 				data = node;
 
 			}// if3
@@ -47,26 +81,61 @@ public class MyTree {
 
 	public Integer get(String key) {
 
-		MyTreeItem current = null;
-		if (root != null) {
-			current = find(key);
-
-			if (current.word.equals(key))
-				return current.count;
-		}
-
-		return null;
+		return caller.get(key, this);
 
 	}
 
-	private MyTreeItem find(String key) {
+	public void treeTraversal() {
+
+		Stack<MyTreeItem> stack = new Stack<MyTreeItem>();
+
+		MyTreeItem current = root;
+		while (!stack.isEmpty() || current != null) {// while1
+
+			if (!stack.isEmpty()) {
+				current = stack.pop();
+
+				if ((!stack.isEmpty())
+						&& (current.right == stack.lastElement())) {// 1
+
+					current = stack.pop();
+				}// 1
+
+				else {
+
+					callerProcess.process(current);
+
+					current = null;
+				}
+
+			}
+
+			while (current != null) {// while 0
+
+				stack.push(current);
+
+				if (current.right != null) {// if0
+
+					stack.push(current.right);
+					stack.push(current);
+
+				}// if0
+
+				current = current.left;
+
+			}// while 0
+
+		}// while1
+	}
+
+	MyTreeItem find(String key) {
 
 		MyTreeItem node = root;
 		// I change this but now I don't now what
-		while (((compare(node.word, key) == 1) && (node.left != null))
-				|| ((compare(node.word, key) == -1) && (node.right != null))) {
+		while (((caller.compare(node.word, key) == 1) && (node.left != null))
+				|| ((caller.compare(node.word, key) == -1) && (node.right != null))) {
 
-			if (compare(node.word, key) == 1) {// if1
+			if (caller.compare(node.word, key) == 1) {// if1
 				node = node.left;
 
 			}// if1
@@ -82,55 +151,51 @@ public class MyTree {
 
 	}
 
-	private int compare(String nodeVal, String val) {
+	private class WithCaseSensitive implements CaseSensitive {
 
-		if (nodeVal.hashCode() > val.hashCode())
-			return 1;
+		public Integer compare(String nodeVal, String val) {
 
-		if (nodeVal.hashCode() < val.hashCode())
-			return -1;
+			if (nodeVal.hashCode() > val.hashCode())
+				return 1;
 
-		// else
-		return 0;
-	}
+			if (nodeVal.hashCode() < val.hashCode())
+				return -1;
 
-	private class MyTreeItem {
-
-		MyTreeItem left;
-		MyTreeItem right;
-
-		String word;
-		Integer count;
-
-	}
-
-	public static void main(String[] args) {
-
-		FileReaderImplement file = new FileReaderImplement();
-		file.readFile();
-
-		String s = file.getFileString();
-
-		ImplementWordsExtraction word = new ImplementWordsExtraction();
-		word.parseString(s);
-		String f[] = word.getWords();
-
-		MyTree words = new MyTree();
-
-		long totalT = -System.currentTimeMillis();
-		for (int i = 0; i < f.length; i++) {
-
-			Integer count = words.get(f[i]);
-			words.add(f[i], count == null ? 1 : count + 1);
+			return 0;
 		}
-		// time 30-34ms in base version WordsCounterImplement 1454ms
-		totalT += System.currentTimeMillis();
 
-		System.out.println(words.get("Acknowledgement"));
-		System.out.println(totalT);
+		public Integer get(String key, MyTree tree) {
 
-		// E:\work\rfc2822.txt
+			MyTreeItem current = null;
+			if (root != null) {
+				current = find(key);
 
-	}// main
+				if (current.word.equals(key))
+					return current.count;
+			}
+
+			return null;
+
+		}
+
+	}
+
+	public class MyTreeItem {
+
+		private MyTreeItem left;
+		private MyTreeItem right;
+
+		private String word;
+		private Integer count;
+
+		public String getWord() {
+			return word;
+		}
+
+		public Integer getCount() {
+			return count;
+		}
+
+	}
 
 }// Mytree
