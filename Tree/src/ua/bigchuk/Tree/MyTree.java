@@ -7,7 +7,7 @@ import ua.bigchuk.wordcounter.ImplementWordsExtraction;
 import ua.bigchuk.wordcounter.WordSaveImplement;
 import ua.bigchuk.wordcounter.WordsCounterImplement;
 
-public class MyTree {
+public class MyTree implements Iterable<String> {
 
 	public MyTree() {
 
@@ -137,7 +137,7 @@ public class MyTree {
 		}// while1
 	}
 
-	MyTreeItem find(String key) {
+	protected MyTreeItem find(String key) {
 
 		MyTreeItem node = root;
 		// I change this but now I don't now what
@@ -160,6 +160,36 @@ public class MyTree {
 
 	}
 
+	//I work about this
+	
+	public Iterator<String>iterator(){
+		
+		
+		
+		
+		
+		return new Iterator<String>(){
+			
+		public boolean	hasNext(){
+			
+			return true;
+		}
+			
+		public String next(){
+			
+			
+			return "d";
+		}
+		
+		public void remove(){}
+		
+		};
+		
+		
+	}
+	
+	
+	
 	private class WithCaseSensitive implements CaseSensitive {
 
 		public Integer compare(String nodeVal, String val) {
@@ -211,8 +241,10 @@ public class MyTree {
 		
 		
 		
-		
-		
+		MyTree test=new MyTree();
+		test.add("b", 1);
+		test.add("a", 1);
+		test.add("z", 1);
 		
 		
 		
