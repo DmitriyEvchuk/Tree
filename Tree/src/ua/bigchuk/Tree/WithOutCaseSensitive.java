@@ -21,19 +21,18 @@ public class WithOutCaseSensitive implements CaseSensitive  {
 		return 0;
 	}
 	
-	public Integer get(String key,MyTree tree) {
+	public boolean equals(String key,String current) {
 
-		MyTreeItem current = null;
 		
 		
-		if (!tree.isEmpty1()) {
-			current = tree.find(key);
+		
+		if (key.equalsIgnoreCase(current)) 
+			return true;
 
-			if (current.getWord().equalsIgnoreCase(key))
-				return current.getCount();
-		}
+			
+		
 
-		return null;
+		return false;
 
 	}
 

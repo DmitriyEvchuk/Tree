@@ -5,11 +5,12 @@ import java.util.*;
 import ua.bigchuk.wordcounter.FileReaderImplement;
 import ua.bigchuk.wordcounter.ImplementWordsExtraction;
 import ua.bigchuk.wordcounter.WordSaveImplement;
+import ua.bigchuk.wordcounter.WordsCounterImplement;
 
 public class MyTree {
 
 	public MyTree() {
-		
+
 		this.caller = new WithCaseSensitive();
 	}
 
@@ -82,9 +83,15 @@ public class MyTree {
 	}
 
 	public Integer get(String key) {
+		
+		MyTreeItem node=null;
+		if(root!=null)
+			{node = find(key);
 
-		return caller.get(key, this);
-
+		if (caller.equals(key, node.word))
+			return node.count;
+			}
+		return null;
 	}
 
 	public void treeTraversal() {
@@ -166,17 +173,12 @@ public class MyTree {
 			return 0;
 		}
 
-		public Integer get(String key, MyTree tree) {
+		public boolean equals(String key, String current) {
 
-			MyTreeItem current = null;
-			if (root != null) {
-				current = find(key);
+			if (key.equals(current))
+				return true;
 
-				if (current.word.equals(key))
-					return current.count;
-			}
-
-			return null;
+			return false;
 
 		}
 
@@ -204,6 +206,17 @@ public class MyTree {
 	
 	
 	
+	public static void main(String []args){
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 	
 	
 	
