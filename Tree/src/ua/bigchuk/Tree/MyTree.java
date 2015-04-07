@@ -241,13 +241,7 @@ public class MyTree implements Iterable<String> {
 		private String word;
 		private Integer count;
 
-		public String getWord() {
-			return word;
-		}
-
-		public Integer getCount() {
-			return count;
-		}
+		
 
 	}
 
