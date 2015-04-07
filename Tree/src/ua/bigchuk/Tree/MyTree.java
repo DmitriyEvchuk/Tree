@@ -11,11 +11,11 @@ public class MyTree implements Iterable<String> {
 		this.caller = new WithCaseSensitive();
 	}
 
-	public MyTree(CaseSensitive caller) {
+	public MyTree(MyCompare caller) {
 		this.caller = caller;
 	}
 
-	private CaseSensitive caller;
+	private MyCompare caller;
 
 	// private Integer sizeLeftTree;
 	// private Integer sizeRightTree;
@@ -209,7 +209,7 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	private class WithCaseSensitive implements CaseSensitive {
+	private class WithCaseSensitive implements MyCompare {
 
 		public Integer compare(String nodeVal, String val) {
 
