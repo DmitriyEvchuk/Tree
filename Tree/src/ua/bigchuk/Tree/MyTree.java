@@ -9,6 +9,8 @@ import ua.bigchuk.wordcounter.WordSaveImplement;
 public class MyTree {
 
 	public MyTree() {
+		
+		this.caller = new WithCaseSensitive();
 	}
 
 	public MyTree(CaseSensitive caller, TreeItemProcess callerProcess) {
@@ -24,7 +26,7 @@ public class MyTree {
 	public MyTree(TreeItemProcess callerProcess) {
 
 		this.callerProcess = callerProcess;
-		caller = new WithCaseSensitive();
+		this.caller = new WithCaseSensitive();
 	}
 
 	private TreeItemProcess callerProcess;
@@ -197,5 +199,23 @@ public class MyTree {
 		}
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }// Mytree
