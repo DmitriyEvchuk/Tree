@@ -2,10 +2,7 @@ package ua.bigchuk.Tree;
 
 import java.util.*;
 
-import ua.bigchuk.wordcounter.FileReaderImplement;
-import ua.bigchuk.wordcounter.ImplementWordsExtraction;
-import ua.bigchuk.wordcounter.WordSaveImplement;
-import ua.bigchuk.wordcounter.WordsCounterImplement;
+
 
 public class MyTree implements Iterable<String> {
 
@@ -14,37 +11,19 @@ public class MyTree implements Iterable<String> {
 		this.caller = new WithCaseSensitive();
 	}
 
-	public MyTree(CaseSensitive caller, TreeItemProcess callerProcess) {
-
-		this.callerProcess = callerProcess;
-		this.caller = caller;
-	}
-
 	public MyTree(CaseSensitive caller) {
 		this.caller = caller;
 	}
 
-	public MyTree(TreeItemProcess callerProcess) {
-
-		this.callerProcess = callerProcess;
-		this.caller = new WithCaseSensitive();
-	}
-
-	private TreeItemProcess callerProcess;
 	private CaseSensitive caller;
 
-	private Integer sizeLeftTree;
-	private Integer sizeRightTree;
+	// private Integer sizeLeftTree;
+	// private Integer sizeRightTree;
 	private MyTreeItem root;
 	private int size;
 
-	// when I will do balanse I need size and I change this method
-	public boolean isEmpty1() {
-
-		if (root != null)
-			return false;
-
-		return true;
+	public Integer size() {
+		return size;
 	}
 
 	public void add(String word, int count) {
@@ -96,48 +75,44 @@ public class MyTree implements Iterable<String> {
 		return null;
 	}
 
-	public void treeTraversal() {
-
-		Stack<MyTreeItem> stack = new Stack<MyTreeItem>();
-
-		MyTreeItem current = root;
-		while (!stack.isEmpty() || current != null) {// while1
-
-			if (!stack.isEmpty()) {
-				current = stack.pop();
-
-				if ((!stack.isEmpty())
-						&& (current.right == stack.lastElement())) {// 1
-
-					current = stack.pop();
-				}// 1
-
-				else {
-
-					callerProcess.process(current);
-
-					current = null;
-				}
-
-			}
-
-			while (current != null) {// while 0
-
-				stack.push(current);
-
-				if (current.right != null) {// if0
-
-					stack.push(current.right);
-					stack.push(current);
-
-				}// if0
-
-				current = current.left;
-
-			}// while 0
-
-		}// while1
-	}
+	/* I don't now may be this method I use when balanse tree
+	 * public void treeTraversal() {
+	 * 
+	 * Stack<MyTreeItem> stack = new Stack<MyTreeItem>();
+	 * 
+	 * MyTreeItem current = root; while (!stack.isEmpty() || current != null)
+	 * {// while1
+	 * 
+	 * if (!stack.isEmpty()) { current = stack.pop();
+	 * 
+	 * if ((!stack.isEmpty()) && (current.right == stack.lastElement())) {// 1
+	 * 
+	 * current = stack.pop(); }// 1
+	 * 
+	 * else {
+	 * 
+	 * callerProcess.process(current);
+	 * 
+	 * current = null; }
+	 * 
+	 * }
+	 * 
+	 * while (current != null) {// while 0
+	 * 
+	 * stack.push(current);
+	 * 
+	 * if (current.right != null) {// if0
+	 * 
+	 * stack.push(current.right); stack.push(current);
+	 * 
+	 * }// if0
+	 * 
+	 * current = current.left;
+	 * 
+	 * }// while 0
+	 * 
+	 * }// while1 }
+	 */
 
 	protected MyTreeItem find(String key) {
 
@@ -162,7 +137,7 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	// I work about this
+	
 
 	public Iterator<String> iterator() {
 
@@ -227,6 +202,7 @@ public class MyTree implements Iterable<String> {
 			}
 
 			public void remove() {
+				System.out.println("don't do this!");
 			}
 
 		};
@@ -275,6 +251,8 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	
+	public static void main(String[] args) {
+
+	}
 
 }// Mytree
