@@ -36,6 +36,7 @@ public class MyTree implements Iterable<String> {
 	private Integer sizeLeftTree;
 	private Integer sizeRightTree;
 	private MyTreeItem root;
+	private int size;
 
 	// when I will do balanse I need size and I change this method
 	public boolean isEmpty1() {
@@ -54,6 +55,7 @@ public class MyTree implements Iterable<String> {
 
 		{
 			root = data;
+			size++;
 		}// if
 
 		else {
@@ -62,12 +64,12 @@ public class MyTree implements Iterable<String> {
 
 			if (caller.compare(node.word, word) == 1) {// if1
 				node.left = data;
-
+				size++;
 			}// if1
 
 			if (caller.compare(node.word, word) == -1) {// if2
 				node.right = data;
-
+				size++;
 			}// if2
 
 			if (caller.compare(node.word, word) == 0) {// if3
@@ -83,14 +85,14 @@ public class MyTree implements Iterable<String> {
 	}
 
 	public Integer get(String key) {
-		
-		MyTreeItem node=null;
-		if(root!=null)
-			{node = find(key);
 
-		if (caller.equals(key, node.word))
-			return node.count;
-			}
+		MyTreeItem node = null;
+		if (root != null) {
+			node = find(key);
+
+			if (caller.equals(key, node.word))
+				return node.count;
+		}
 		return null;
 	}
 
@@ -160,36 +162,77 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	//I work about this
-	
-	public Iterator<String>iterator(){
-		
-		
-		
-		
-		
-		return new Iterator<String>(){
-			
-		public boolean	hasNext(){
-			
-			return true;
-		}
-			
-		public String next(){
-			
-			
-			return "d";
-		}
-		
-		public void remove(){}
-		
+	// I work about this
+
+	public Iterator<String> iterator() {
+
+		return new Iterator<String>() {
+
+			Stack<MyTreeItem> stack = new Stack<MyTreeItem>();
+			MyTreeItem current;
+
+			int numberCurrentElem = 0;
+
+			{
+				current = root;
+			}
+
+			public String next() {
+
+				while (!stack.isEmpty() || current != null) {// while1
+
+					if (!stack.isEmpty()) {
+						current = stack.pop();
+
+						if ((!stack.isEmpty())
+								&& (current.right == stack.lastElement())) {// 1
+
+							current = stack.pop();
+						}// 1
+
+						else {
+							numberCurrentElem++;
+							return current.word;
+						}
+
+					}
+
+					while (current != null) {// while 0
+
+						stack.push(current);
+
+						if (current.right != null) {// if0
+
+							stack.push(current.right);
+							stack.push(current);
+
+						}// if0
+
+						current = current.left;
+
+					}// while 0
+
+				}// while1
+
+				return null;
+			}
+
+			public boolean hasNext() {
+
+				if (size == numberCurrentElem)
+					return false;
+
+				return true;
+
+			}
+
+			public void remove() {
+			}
+
 		};
-		
-		
+
 	}
-	
-	
-	
+
 	private class WithCaseSensitive implements CaseSensitive {
 
 		public Integer compare(String nodeVal, String val) {
@@ -231,36 +274,7 @@ public class MyTree implements Iterable<String> {
 		}
 
 	}
-	
-	
-	
-	
-	
-	public static void main(String []args){
-		
-		
-		
-		
-		MyTree test=new MyTree();
-		test.add("b", 1);
-		test.add("a", 1);
-		test.add("z", 1);
-		
-		
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 
 }// Mytree
