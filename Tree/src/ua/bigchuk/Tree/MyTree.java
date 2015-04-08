@@ -154,7 +154,7 @@ public class MyTree implements Iterable<String> {
 
 			public String next() {
 
-				while (!stack.isEmpty() || current != null) {// while1
+				while (hasNext()) {// while1
 
 					if (!stack.isEmpty()) {
 						current = stack.pop();
@@ -233,7 +233,7 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	public class MyTreeItem {
+	private class MyTreeItem {
 
 		private MyTreeItem left;
 		private MyTreeItem right;
@@ -245,8 +245,6 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	public static void main(String[] args) {
-
-	}
+	
 
 }// Mytree
