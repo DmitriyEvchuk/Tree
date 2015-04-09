@@ -2,8 +2,6 @@ package ua.bigchuk.Tree;
 
 import java.util.*;
 
-
-
 public class MyTree implements Iterable<String> {
 
 	public MyTree() {
@@ -75,45 +73,7 @@ public class MyTree implements Iterable<String> {
 		return null;
 	}
 
-	/* I don't now may be this method I use when balanse tree
-	 * public void treeTraversal() {
-	 * 
-	 * Stack<MyTreeItem> stack = new Stack<MyTreeItem>();
-	 * 
-	 * MyTreeItem current = root; while (!stack.isEmpty() || current != null)
-	 * {// while1
-	 * 
-	 * if (!stack.isEmpty()) { current = stack.pop();
-	 * 
-	 * if ((!stack.isEmpty()) && (current.right == stack.lastElement())) {// 1
-	 * 
-	 * current = stack.pop(); }// 1
-	 * 
-	 * else {
-	 * 
-	 * callerProcess.process(current);
-	 * 
-	 * current = null; }
-	 * 
-	 * }
-	 * 
-	 * while (current != null) {// while 0
-	 * 
-	 * stack.push(current);
-	 * 
-	 * if (current.right != null) {// if0
-	 * 
-	 * stack.push(current.right); stack.push(current);
-	 * 
-	 * }// if0
-	 * 
-	 * current = current.left;
-	 * 
-	 * }// while 0
-	 * 
-	 * }// while1 }
-	 */
-
+	
 	protected MyTreeItem find(String key) {
 
 		MyTreeItem node = root;
@@ -137,13 +97,12 @@ public class MyTree implements Iterable<String> {
 
 	}
 
-	
-
 	public Iterator<String> iterator() {
 
 		return new Iterator<String>() {
 
-			Stack<MyTreeItem> stack = new Stack<MyTreeItem>();
+			Stack<MyTreeItem> work = new Stack<MyTreeItem>();
+			Stack<MyTreeItem> right = new Stack<MyTreeItem>();
 			MyTreeItem current;
 
 			int numberCurrentElem = 0;
@@ -154,40 +113,38 @@ public class MyTree implements Iterable<String> {
 
 			public String next() {
 
-				while (hasNext()) {// while1
+				while (hasNext()) {
 
-					if (!stack.isEmpty()) {
-						current = stack.pop();
+					if (!work.isEmpty()) {
 
-						if ((!stack.isEmpty())
-								&& (current.right == stack.lastElement())) {// 1
+						if (!right.isEmpty()) {
 
-							current = stack.pop();
-						}// 1
+							current = right.pop();
+						}
 
 						else {
+
 							numberCurrentElem++;
-							return current.word;
+							return work.pop().word;
 						}
 
 					}
 
-					while (current != null) {// while 0
+					while (current != null) {
 
-						stack.push(current);
+						work.push(current);
 
-						if (current.right != null) {// if0
+						if (current.right != null) {
 
-							stack.push(current.right);
-							stack.push(current);
+							right.push(current.right);
 
-						}// if0
+						}
 
 						current = current.left;
 
-					}// while 0
+					}
 
-				}// while1
+				}
 
 				return null;
 			}
@@ -208,6 +165,64 @@ public class MyTree implements Iterable<String> {
 		};
 
 	}
+
+	/*
+	 * public Iterator<String> iterator() {
+	 * 
+	 * return new Iterator<String>() {
+	 * 
+	 * Stack<MyTreeItem> stack = new Stack<MyTreeItem>(); MyTreeItem current;
+	 * 
+	 * int numberCurrentElem = 0;
+	 * 
+	 * { current = root; }
+	 * 
+	 * public String next() {
+	 * 
+	 * while (hasNext()) {// while1
+	 * 
+	 * if (!stack.isEmpty()) { current = stack.pop();
+	 * 
+	 * if ((!stack.isEmpty()) && (current.right == stack.lastElement())) {// 1
+	 * 
+	 * current = stack.pop(); }// 1
+	 * 
+	 * else { numberCurrentElem++; return current.word; }
+	 * 
+	 * }
+	 * 
+	 * while (current != null) {// while 0
+	 * 
+	 * stack.push(current);
+	 * 
+	 * if (current.right != null) {// if0
+	 * 
+	 * stack.push(current.right); stack.push(current);
+	 * 
+	 * }// if0
+	 * 
+	 * current = current.left;
+	 * 
+	 * }// while 0
+	 * 
+	 * }// while1
+	 * 
+	 * return null; }
+	 * 
+	 * public boolean hasNext() {
+	 * 
+	 * if (size == numberCurrentElem) return false;
+	 * 
+	 * return true;
+	 * 
+	 * }
+	 * 
+	 * public void remove() { System.out.println("don't do this!"); }
+	 * 
+	 * };
+	 * 
+	 * }
+	 */
 
 	private class WithCaseSensitive implements MyCompare {
 
@@ -240,8 +255,6 @@ public class MyTree implements Iterable<String> {
 
 		private String word;
 		private Integer count;
-
-		
 
 	}
 
